@@ -1,3 +1,22 @@
+export async function getServerSideProps({
+  params: { count },
+}: {
+  params: { count: string };
+}) {
+  const pokemonReq = await fetch(
+    `http://localhost:8080/pokemon-${count}.json`,
+    {
+      cache: "no-cache",
+    }
+  );
+  const pokemon = await pokemonReq.json();
+  return {
+    props: {
+      pokemon,
+    },
+  };
+}
+
 const Pokemon = ({ pokemon }: { pokemon: Record<string, string> }) => {
   return (
     <>
@@ -8,20 +27,11 @@ const Pokemon = ({ pokemon }: { pokemon: Record<string, string> }) => {
   );
 };
 
-export default async function Home({
-  params: { count },
+export default function Home({
+  pokemon,
 }: {
-  params: { count: string };
+  pokemon: Record<string, string>[];
 }) {
-  // const pokemonReq = await fetch(
-  //   `http://localhost:8080/pokemon-${count}.json`,
-  //   {
-  //     cache: "no-cache",
-  //   }
-  // );
-  // const pokemon = (await pokemonReq.json()) as Record<string, string>[];
-  const pokemon: Record<string, string>[] = [];
-
   return (
     <main>
       <h1>Pokemon</h1>
